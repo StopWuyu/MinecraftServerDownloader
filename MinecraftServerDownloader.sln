@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinecraftServerDownloader", "MinecraftServerDownloader.csproj", "{D14059ED-9AE2-4AC7-B3A4-C581794C36E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D14059ED-9AE2-4AC7-B3A4-C581794C36E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D14059ED-9AE2-4AC7-B3A4-C581794C36E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D14059ED-9AE2-4AC7-B3A4-C581794C36E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D14059ED-9AE2-4AC7-B3A4-C581794C36E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CBD5D56B-29E5-4251-BEAD-7EC6F71531CA}
+	EndGlobalSection
+EndGlobal
