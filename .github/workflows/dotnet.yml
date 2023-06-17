@@ -1,36 +1,42 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+name: Build and Tests
 
-name: .NET
-
-on:
+on:  
   push:
-    branches: [ "master" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ main ]
 
-jobs:
-  build:
+jobs:  
+  build:    
+    runs-on: windows-latest
+    
+    steps:      
+      - uses: actions/checkout@v2
+      
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
 
-    runs-on: ubuntu-latest
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+        
+      - name: Setup VSTest
+        uses: darenm/Setup-VSTest@v1
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 4.7
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        # Artifact name
-        name: MinecraftServerDownloader
-        # A file, directory or wildcard pattern that describes what to upload
-        path: bin/Release/
-        # The desired behavior if no files are found using the provided path.
+      - name: Navigate to Workspace
+        run: cd $GITHUB_WORKSPACE
+
+      - name: Restore Packages
+        run: nuget restore Sandbox.sln
+
+      - name: Build Solution
+        run: |
+          msbuild.exe MinecraftServerDownloader.sln /p:platform="Any CPU" /p:configuration="Release"
+  
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          # Artifact name
+          name: MinecraftServerDownloader
+          # A file, directory or wildcard pattern that describes what to upload
+          path: bin/Release/
+          # The desired behavior if no files are found using the provided path.
