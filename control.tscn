@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3 uid="uid://dg85obcplwwfa"]
+
+[ext_resource type="Script" path="res://Menu.cs" id="1_45et2"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_gtva8"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_gtva8")
+expand_mode = 1
+
+[node name="ItemList" type="ItemList" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 448.0
+grow_vertical = 2
+item_count = 2
+item_0/text = "我超"
+item_1/text = "冰！"
+script = ExtResource("1_45et2")
+
+[node name="ItemList2" type="ItemList" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -448.0
+grow_horizontal = 0
+grow_vertical = 2
+item_count = 2
+item_0/text = "麻了"
+item_1/text = ""
