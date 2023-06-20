@@ -70,38 +70,35 @@ namespace MinecraftServerDownloader
         public string Name { get; set; }
         public string Sha256 { get; set; }
     }
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         string downloadUrl = "NO";
+
         public MainWindow()
         {
             InitializeComponent();
-
             Initialize();
         }
 
         public async void Initialize()
         {
-            // GET请求 到 https://api.papermc.io/v2/projects
+            // GET请求到https://api.papermc.io/v2/projects
             // 该API返回一个JSON字符串，包含了PaperMC的所有项目
 
             var projectsString = await ModNetwork.SendGetRequest("https://api.papermc.io/v2/projects");
-
             Console.WriteLine(projectsString);
 
             // 解析json
             var projects = JsonConvert.DeserializeObject<Projects>(projectsString);
             projectsSel.Items.Clear();
-            projects.projects.ForEach((a)=> 
+            projects.projects.ForEach((a) =>
             {
                 projectsSel.Items.Add(a);
             });
 
-            new Thread(() => 
-            { 
+            new Thread(() =>
+            {
                 while (true)
                 {
                     if (downloadUrl.Equals("NO"))
@@ -136,16 +133,14 @@ namespace MinecraftServerDownloader
             typeHash.Visibility = Visibility.Hidden;
             typeTime.Visibility = Visibility.Hidden;
             typeDownload.Visibility = Visibility.Hidden;
-            typeVersion.Visibility = Visibility.Hidden;
 
             var projectDetailString = await ModNetwork.SendGetRequest("https://api.papermc.io/v2/projects/" + projectsSel.SelectedItem);
-
             Console.WriteLine(projectDetailString);
 
             // 解析
             var projectDetail = JsonConvert.DeserializeObject<ProjectDetail>(projectDetailString);
             versionSel.Items.Clear();
-            projectDetail.Versions.ForEach((a) => 
+            projectDetail.Versions.ForEach((a) =>
             {
                 versionSel.Items.Add(a);
             });
@@ -172,8 +167,8 @@ namespace MinecraftServerDownloader
             typeDownload.Visibility = Visibility.Hidden;
 
             var buildDataString = await ModNetwork.SendGetRequest("https://api.papermc.io/v2/projects/" + projectsSel.SelectedItem + "/versions/" + versionSel.SelectedItem);
-
             Console.WriteLine(buildDataString);
+
             // 解析
             var buildData = JsonConvert.DeserializeObject<BuildData>(buildDataString);
             buildSel.Items.Clear();
@@ -197,7 +192,7 @@ namespace MinecraftServerDownloader
                 return;
             }
             var projectDataString = await ModNetwork.SendGetRequest("https://api.papermc.io/v2/projects/" + projectsSel.SelectedItem + "/versions/" + versionSel.SelectedItem + "/builds/" + buildSel.SelectedItem);
-            
+
             Console.WriteLine(projectDataString);
             // 解析
             try
@@ -217,7 +212,8 @@ namespace MinecraftServerDownloader
 
                 downloadUrl = "https://api.papermc.io/v2/projects/" + projectsSel.SelectedItem + "/versions/" + versionSel.SelectedItem + "/builds/" + buildSel.SelectedItem + "/downloads/" + projectData.Downloads.Application.Name;
                 buttonDownload.IsEnabled = true;
-            } catch
+            }
+            catch
             {
 
             }
@@ -261,21 +257,22 @@ namespace MinecraftServerDownloader
             Environment.Exit(0);
         }
 
-        private void buttonDownload_Click(object sender, RoutedEventArgs e)
+        private async void buttonDownload_Click(object sender, RoutedEventArgs e)
         {
+            ProgressDownload.Value = 0;
             ProgressDownload.Visibility = Visibility.Visible;
             buttonDownload.Visibility = Visibility.Collapsed;
             Console.WriteLine(downloadUrl);
-            var downloader = new MultiThreadedDownloader(downloadUrl, 
+            var downloader = new MultiThreadedDownloader(downloadUrl,
                 System.IO.Path.Combine(Environment.CurrentDirectory, string.Format("{0}-{1}-{2}.jar", projectsSel.SelectedItem, versionSel.SelectedItem, buildSel.SelectedItem)),
                 4);
-            downloader.ProgressChanged += (threadId, downloadedBytes, percent) =>
+            downloader.ProgressChanged += (progress) =>  // Broken (I dont know how to fix it)
             {
-                Console.WriteLine($"Thread {threadId}: Downloaded {downloadedBytes} bytes.");
+                Console.WriteLine($"Thread {progress.ThreadId}: Downloaded {progress.DownloadedBytes} bytes. Downloaded {progress.ProgressPercentage} %");
 
                 Dispatcher.Invoke(() =>
                 {
-                    ProgressDownload.Value = percent;
+                    ProgressDownload.Value = progress.ProgressPercentage;
                 });
             };
             downloader.DownloadCompleted += (success, error) =>
@@ -285,7 +282,8 @@ namespace MinecraftServerDownloader
                     Console.WriteLine("Download completed successfully.");
                     Dispatcher.Invoke(() =>
                     {
-                        buttonDownload.Content = "下载成功";
+                        //buttonDownload.Content = "下载成功";
+                        buttonDownload.Text = "下载成功";
                         Console.WriteLine(System.IO.Path.Combine(Environment.CurrentDirectory, string.Format("{0}-{1}-{2}.jar", projectsSel.SelectedItem, versionSel.SelectedItem, buildSel.SelectedItem)));
                         buttonDownload.Visibility = Visibility.Visible;
                         ProgressDownload.Visibility = Visibility.Collapsed;
@@ -294,7 +292,8 @@ namespace MinecraftServerDownloader
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            buttonDownload.Content = "下载";
+                            //buttonDownload.Content = "下载";
+                            buttonDownload.Text = "下载";
                         });
                     }, null, TimeSpan.FromSeconds(3), TimeSpan.FromMilliseconds(-1));
                 }
@@ -304,7 +303,8 @@ namespace MinecraftServerDownloader
                     Console.WriteLine(error.StackTrace);
                     Dispatcher.Invoke(() =>
                     {
-                        buttonDownload.Content = "下载失败";
+                        //buttonDownload.Content = "下载失败";
+                        buttonDownload.Text = "下载失败";
 
                         buttonDownload.Visibility = Visibility.Visible;
                         ProgressDownload.Visibility = Visibility.Collapsed;
@@ -313,12 +313,13 @@ namespace MinecraftServerDownloader
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            buttonDownload.Content = "下载";
+                            //buttonDownload.Content = "下载";
+                            buttonDownload.Text = "下载";
                         });
                     }, null, TimeSpan.FromSeconds(3), TimeSpan.FromMilliseconds(-1));
                 }
             };
-            downloader.StartDownload();
+            await downloader.StartDownloadAsync();
         }
     }
 }

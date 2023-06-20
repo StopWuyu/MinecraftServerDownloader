@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace MinecraftServerDownloader.Modules
@@ -11,13 +7,11 @@ namespace MinecraftServerDownloader.Modules
     {
         public static async Task<string> SendGetRequest(string url)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpResponseMessage httpResponse = await HttpClientSingleton.Instance.GetAsync(url))
             {
-                HttpResponseMessage httpResponse = await client.GetAsync(url);
                 httpResponse.EnsureSuccessStatusCode(); // 确保响应成功
 
-                string responseContent = await httpResponse.Content.ReadAsStringAsync();
-                return responseContent;
+                return await httpResponse.Content.ReadAsStringAsync();
             }
         }
     }

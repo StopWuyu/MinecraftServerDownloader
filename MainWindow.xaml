@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MinecraftServerDownloader"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:MinecraftServerDownloader.Controls"
     Title="Minecraft Server Downloader"
     Width="1000"
     Height="600"
@@ -83,18 +84,20 @@
                             <ToolTip Content="点击复制" />
                         </TextBlock.ToolTip>
                     </TextBlock>
+
                 </StackPanel>
             </Grid>
 
             <Grid Grid.Row="1" Margin="15">
                 <!--  进度条与下载按钮  -->
-                <Button
+                <!--<Button
                     x:Name="buttonDownload"
                     Width="100"
                     Click="buttonDownload_Click"
                     Content="下载"
                     FontSize="18"
-                    IsEnabled="False" />
+                    IsEnabled="False" />-->
+                <uc:CustomButton Text="下载" Width="100" Click="buttonDownload_Click" IsEnabled="False" x:Name="buttonDownload" />
                 <ProgressBar
                     x:Name="ProgressDownload"
                     Height="25"
