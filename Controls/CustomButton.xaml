@@ -1,0 +1,17 @@
+﻿<Border x:Class="MinecraftServerDownloader.Controls.CustomButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MinecraftServerDownloader"
+        Width="100"
+        Name="ButtonBorder"
+        Height="40"
+        Background="Transparent"
+        BorderBrush="Black"
+        BorderThickness="1"
+        CornerRadius="8"
+        MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseLeftButtonDown="Button_MouseDown" MouseLeftButtonUp="Button_MouseUp">
+    <Border.RenderTransform>
+        <ScaleTransform x:Name="ButtonScale" />
+    </Border.RenderTransform>
+    <TextBlock x:Name="ButtonText" Text="{Binding Text, ElementName=ButtonBorder}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" />
+</Border>
