@@ -19,20 +19,47 @@
         <Grid.ColumnDefinitions>
 			<ColumnDefinition/>
 			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
         <ListBox
             Grid.Column="0"
-            Selection="{Binding selection}"
-            Items="{Binding items}"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            Selection="{Binding selection0}"
+            Items="{Binding Items0}"
             Padding="50"/>
+        <!-- IsEnabled="false" -->
         <ListBox
             Grid.Column="1"
-            IsEnabled="false"
-            Items="{Binding MyItems}"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            Selection="{Binding selection1}"
+            Items="{Binding Items1}"
+            Padding="50">
+            <!-- <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Foreground="#000000" Text="{Binding}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate> -->
+        </ListBox>
+        <ListBox
+            Grid.Column="2"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            Selection="{Binding selection2}"
+            Items="{Binding Items2}"
+            Padding="50"/>
+        <ListBox
+            Grid.Column="3"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            Selection="{Binding selection3}"
+            Items="{Binding Items3}"
             Padding="50">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Foreground="#000000" Text="{Binding}"/>
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Width="145" MaxWidth="145"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
